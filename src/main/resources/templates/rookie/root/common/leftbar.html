@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <meta charset="UTF-8">
+    <title>topbar</title>
+</head>
+<body>
+
+<!--左侧导航-->
+<aside class="lyear-layout-sidebar" id="leftbaraside">
+    <div id="logo" class="sidebar-header" >
+        <img alt="140x140" th:src="@{/images/rookie.png}"/>
+        <a class="navbar-brand"  th:href="@{/root/index.html}" >菜鸟商城后台管理系统</a>
+    </div>
+    <div class="lyear-layout-sidebar-scroll">
+        <nav class="sidebar-main">
+            <ul class="nav nav-drawer">
+                <li class="nav-item" th:class="${activeUrl=='index.html'?'nav-item active':'nav-item'}"><a
+                        th:href="@{/root/index.html}"><i
+                        class="mdi mdi-home"></i>系统首页</a></li>
+                <li class="nav-item" th:class="${activeUrl=='userinfo.html'?'nav-item active':'nav-item'}"><a
+                        th:href="@{/root/toUserInfo.html}"><i
+                        class="mdi mdi-account-settings-variant"></i>用户管理</a></li>
+
+                <li  class="nav-item nav-item-has-subnav"
+                    th:class="${activeUrl1=='goods'?'nav-item nav-item-has-subnav active open':'nav-item nav-item-has-subnav'}"
+                ><a href="javascript:void(0)"><i class="mdi mdi-store"></i>商品管理</a>
+                    <ul class="nav nav-subnav">
+                        <li shiro:hasPermission="root:userPermissions" th:class="${activeUrl2=='ordinaryGoods'?'active':''}"><a
+                            th:href="@{/root/toOrdinaryGoodsInfo.html}">普通商品管理</a></li>
+                        <li shiro:hasPermission="root:userPermissions" th:class="${activeUrl2=='seckillGoods'?'active':''}"><a
+                            th:href="@{/root/toSeckillGoodsInfo.html}">秒杀商品管理</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item nav-item-has-subnav"
+                    th:class="${activeUrl1=='order'?'nav-item nav-item-has-subnav active open':'nav-item nav-item-has-subnav'}"
+                ><a href="javascript:void(0)"><i class="mdi mdi-store"></i>订单管理</a>
+                    <ul class="nav nav-subnav">
+                        <li shiro:hasPermission="root:userPermissions" th:class="${activeUrl2=='ordinaryOrder'?'active':''}"><a
+                            th:href="@{/root/toOrdinaryOrderInfo.html}">普通订单管理</a></li>
+                        <li shiro:hasPermission="root:userPermissions" th:class="${activeUrl2=='seckillOrder'?'active':''}"><a
+                            th:href="@{/root/toSeckillOrderInfo.html}">秒杀订单管理</a></li>
+                    </ul>
+                </li>
+
+
+            </ul>
+        </nav>
+    </div>
+</aside>
+<!--End 左侧导航-->
+
+</body>
+</html>
