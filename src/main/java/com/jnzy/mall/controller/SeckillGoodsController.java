@@ -45,12 +45,15 @@ public class SeckillGoodsController {
   }
 
   /**
-   * 添加用户（管理员）
+   * 添加商品（管理员）
    */
   @PostMapping("/root/addSeckillGoods")
   @ResponseBody
   public Msg addSeckillGoods(SeckillGoods seckillGoods) {
     Integer result = seckillGoodsService.insertSeckillGoods(seckillGoods);
+    //TODO
+    seckillGoodsService.selectMaxId();
+    seckillGoods.getStock();
     if (result == 1) {
       return Msg.success();
     }
@@ -175,7 +178,6 @@ public class SeckillGoodsController {
     // 引入PageHelper插件，在查询之前调用startPage方法，传入页码以及每页大小
     PageHelper.startPage(pageNum, pageSize);
     List<SeckillGoods> list = seckillGoodsService.selectAll();
-
     System.out.println(list);
     // 使用PageInfo包装查询后的结果，并交给页面处理
     // PageInfo封装了详细的分页信息，包括我们查询出来的数据，还可以传入连续显示的页数（5）
