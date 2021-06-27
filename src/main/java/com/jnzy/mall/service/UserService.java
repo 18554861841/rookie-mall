@@ -10,12 +10,20 @@ import java.util.List;
  * </p>
  */
 public interface UserService {
-  User selectById(Integer id);
-  User selectByUsername(String username);
+
+  User selectById(Long id);
+
+  User selectByUserName(String username);
+
   User selectByUsernamePassword(String username,String password);
+
   List<User> selectAllUser();
+
   int insertUser(User user);
+
   Integer updateUser(User user);
-  Integer deleteById(Integer id);
+
+  Integer deleteById(Long id);
+
   int updateByPrimaryKeySelective(User record);
 }

@@ -15,7 +15,7 @@ public interface SeckillGoodsService {
   List<SeckillGoods> selectAll();
 
   //根据id查
-  SeckillGoods selectById(Integer id);
+  SeckillGoods selectById(Long id);
 
   //添加普通商品
   Integer insertSeckillGoods(SeckillGoods seckillGoods);
@@ -24,14 +24,14 @@ public interface SeckillGoodsService {
   Integer updateSeckillGoods(SeckillGoods seckillGoods);
 
   //根据id删除
-  Integer deleteById(Integer id);
+  Integer deleteById(Long id);
 
-  int selectMaxId();
+  Long selectMaxId();
 
   Integer updatePic(SeckillGoods seckillGoods);
 
   //库存减一
-  int deductSeckillGoodsStock(Integer id);
+  int deductSeckillGoodsStock(Long id);
 
 
 
@@ -40,7 +40,7 @@ public interface SeckillGoodsService {
    * @param id
    * @return
    */
-  SeckillGoods selectSeckillGoodsById(Integer id);
+  SeckillGoods selectSeckillGoodsById(Long id);
 
   /**
    * 添加秒杀商品
@@ -65,6 +65,6 @@ public interface SeckillGoodsService {
    * 删除秒杀商品
    * @param id
    */
-  void deleteSeckillGood(Integer id);
+  void deleteSeckillGood(Long id);
 
 }

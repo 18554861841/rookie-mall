@@ -26,22 +26,22 @@ public class OrdinaryOrderServiceImpl  implements OrdinaryOrderService {
 
   @Override
   public List<OrdinaryOrder> selectByUsername(String username) {
-    return ordinaryOrderMapper.selectByUsername(username);
+    return ordinaryOrderMapper.selectByUserName(username);
   }
 
   @Override
   public OrdinaryOrder selectById(Integer id) {
-    return ordinaryOrderMapper.selectById(id);
+    return ordinaryOrderMapper.selectByPrimaryKey(id);
   }
 
   @Override
   public Integer deleteById(Integer id) {
-    return ordinaryOrderMapper.deleteById(id);
+    return ordinaryOrderMapper.deleteByPrimaryKey(id);
   }
 
   @Override
   public Integer updateOrdinaryOrder(OrdinaryOrder ordinaryOrder) {
-    return ordinaryOrderMapper.updateOrdinaryOrder(ordinaryOrder);
+    return ordinaryOrderMapper.updateByPrimaryKeySelective(ordinaryOrder);
   }
 
   @Override

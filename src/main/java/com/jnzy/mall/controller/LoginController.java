@@ -32,7 +32,7 @@ public class LoginController {
   @RequestMapping("/login/{username}")
   @ResponseBody
   public Msg toLogin(@PathVariable("username") String username){
-    User user = userService.selectByUsername(username);
+    User user = userService.selectByUserName(username);
     if (user != null) {
       return Msg.success().add("user",user);
     }

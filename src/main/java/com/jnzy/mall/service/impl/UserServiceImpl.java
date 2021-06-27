@@ -16,22 +16,22 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService  {
 
-  @Autowired(required = false)
+  @Autowired
   UserMapper userMapper;
 
   @Override
-  public User selectById(Integer id) {
-    return userMapper.selectById(id);
+  public User selectById(Long id) {
+    return userMapper.selectByPrimaryKey(id);
   }
 
   @Override
-  public User selectByUsername(String username) {
-    return userMapper.selectByUsername(username);
+  public User selectByUserName(String username) {
+    return userMapper.selectByUserName(username);
   }
 
   @Override
   public User selectByUsernamePassword(String username, String password) {
-    return userMapper.selectByUsernamePassword(username,password);
+    return userMapper.selectByUserNamePassWord(username,password);
   }
 
   @Override
@@ -41,17 +41,17 @@ public class UserServiceImpl implements UserService  {
 
   @Override
   public int insertUser(User user) {
-    return userMapper.insertUser(user);
+    return userMapper.insert(user);
   }
 
   @Override
   public Integer updateUser(User user) {
-    return userMapper.updateUser(user);
+    return userMapper.updateByPrimaryKey(user);
   }
 
   @Override
-  public Integer deleteById(Integer id) {
-    return userMapper.deleteById(id);
+  public Integer deleteById(Long id) {
+    return userMapper.deleteByPrimaryKey(id);
   }
 
   @Override

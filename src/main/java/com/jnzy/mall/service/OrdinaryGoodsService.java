@@ -15,7 +15,7 @@ public interface OrdinaryGoodsService {
   List<OrdinaryGoods> selectAll();
 
   //根据id查
-  OrdinaryGoods selectById(Integer id);
+  OrdinaryGoods selectById(Long id);
 
   //添加普通商品
   Integer insertOrdinaryGoods(OrdinaryGoods ordinaryGoods);
@@ -24,11 +24,12 @@ public interface OrdinaryGoodsService {
   Integer updateOrdinaryGoods(OrdinaryGoods ordinaryGoods);
 
   //根据id删除
-  Integer deleteById(Integer id);
+  int deleteById(Long id);
 
-  int selectMaxId();
+  Long selectMaxId();
+
   Integer updatePic(OrdinaryGoods ordinaryGoods);
   //库存减一
-  int deductOrdinaryGoodsStock(Integer id);
+  int deductOrdinaryGoodsStock(Long id);
 
 }

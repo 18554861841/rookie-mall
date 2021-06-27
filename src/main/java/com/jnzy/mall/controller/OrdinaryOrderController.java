@@ -41,7 +41,7 @@ public class OrdinaryOrderController {
    */
   @PostMapping("/admin/buyOrdinaryGoodsProfile/{id}")
   @ResponseBody
-  public Msg addUser(OrdinaryOrder ordinaryOrder,HttpSession session,@PathVariable("id") Integer id) {
+  public Msg addUser(OrdinaryOrder ordinaryOrder,HttpSession session,@PathVariable("id") Long id) {
 
     User loginUser = (User) session.getAttribute("loginUser");
     Double productPrices = (Double) session.getAttribute("ProductPrices");
@@ -51,7 +51,7 @@ public class OrdinaryOrderController {
 
     Integer result = ordinaryOrderService.insertOrdinaryOrder(ordinaryOrder);
     if (result == 1) {
-      Integer i = ordinaryGoodsService.deductOrdinaryGoodsStock(id);
+      int i = ordinaryGoodsService.deductOrdinaryGoodsStock(id);
       if (i == 1) {
         return Msg.success();
       }else {
@@ -101,7 +101,7 @@ public class OrdinaryOrderController {
     System.out.println(ordinaryOrder);
     model.addAttribute("ordinaryOrderList", ordinaryOrder);
     model.addAttribute("seckillOrderList", seckillOrders);
-    return "/admin/order";
+    return "admin/order";
   }
 
 
@@ -129,7 +129,7 @@ public class OrdinaryOrderController {
     model.addAttribute("activeUrl1", "order");
     model.addAttribute("activeUrl2", "ordinaryOrder");
 
-    return "/root/ordinaryOrderInfo";
+    return "root/ordinaryOrderInfo";
   }
 
   /**
@@ -145,6 +145,4 @@ public class OrdinaryOrderController {
     }
     return Msg.fail();
   }
-
-
 }

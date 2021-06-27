@@ -65,7 +65,7 @@ public class SeckillGoodsController {
    */
   @DeleteMapping("/root/deleteSeckillGoodsById/{id}")
   @ResponseBody
-  public Msg deleteSeckillGoodsById(@PathVariable("id") Integer id, HttpSession session) {
+  public Msg deleteSeckillGoodsById(@PathVariable("id") Long id, HttpSession session) {
     Integer result = seckillGoodsService.deleteById(id);
     if (result == 1) {
       return Msg.success();
@@ -76,7 +76,7 @@ public class SeckillGoodsController {
   //  根据id查询
   @GetMapping("/admin/getSeckillGoodsById/{id}")
   @ResponseBody
-  public Msg getSeckillGoodsById(@PathVariable("id") Integer id, HttpSession session, Model model) {
+  public Msg getSeckillGoodsById(@PathVariable("id") Long id, HttpSession session, Model model) {
 
     SeckillGoods seckillGoods = seckillGoodsService.selectById(id);
 
@@ -114,7 +114,7 @@ public class SeckillGoodsController {
    */
   @GetMapping("/root/getSeckillGoodsById/{id}")
   @ResponseBody
-  public Msg getSeckillGoodsInfoById(@PathVariable("id") Integer id) {
+  public Msg getSeckillGoodsInfoById(@PathVariable("id") Long id) {
     SeckillGoods seckillGoods = seckillGoodsService.selectById(id);
     return Msg.success().add("seckillGoods", seckillGoods);
   }
@@ -152,7 +152,7 @@ public class SeckillGoodsController {
       System.out.println(fileName);
       Thread.sleep(500);
       //保存路径到数据库
-      int maxId = seckillGoodsService.selectMaxId();
+      Long maxId = seckillGoodsService.selectMaxId();
       SeckillGoods seckillGoods = new SeckillGoods();
       seckillGoods.setId(maxId);
       seckillGoods.setProductPic(url);
@@ -184,7 +184,7 @@ public class SeckillGoodsController {
     PageInfo<SeckillGoods> pageInfo = new PageInfo<SeckillGoods>(list, 5);
     model.addAttribute("seckillGoodsPageInfo", pageInfo);
     model.addAttribute("seckillGoodsList", list);
-    return "/admin/seckillGoods";
+    return "admin/seckillGoods";
   }
 
   /**
@@ -209,7 +209,7 @@ public class SeckillGoodsController {
     model.addAttribute("activeUrl1", "goods");
     model.addAttribute("activeUrl2", "seckillGoods");
 
-    return "/root/seckillGoodsInfo";
+    return "root/seckillGoodsInfo";
   }
 
   /**
@@ -217,7 +217,7 @@ public class SeckillGoodsController {
    */
   @PutMapping("/root/updateSeckillGoodsProfile/{Id}")
   @ResponseBody
-  public Msg updateSeckillGoodsProfile(@PathVariable("Id") Integer id, SeckillGoods seckillGoods, HttpSession session) {
+  public Msg updateSeckillGoodsProfile(@PathVariable("Id") Long id, SeckillGoods seckillGoods, HttpSession session) {
     seckillGoods.setId(id);
     Integer result = seckillGoodsService.updateSeckillGoods(seckillGoods);
     if (result == 1) {

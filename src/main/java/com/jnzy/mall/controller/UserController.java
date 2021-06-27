@@ -43,7 +43,7 @@ public class UserController {
     model.addAttribute("userPageInfo",pageInfo);
     model.addAttribute("userList",list);
     model.addAttribute("pageTopBarInfo", "用户信息界面");
-    return "/root/userinfo";
+    return "root/userinfo";
   }
 
   /**
@@ -64,7 +64,7 @@ public class UserController {
    */
   @GetMapping("/root/getUserById/{id}")
   @ResponseBody
-  public Msg getUserInfoById(@PathVariable("id")Integer id){
+  public Msg getUserInfoById(@PathVariable("id")Long id){
     User user = userService.selectById(id);
     return Msg.success().add("user",user);
   }
@@ -74,14 +74,14 @@ public class UserController {
    */
   @PutMapping("/root/updateUserProfile/{userId}")
   @ResponseBody
-  public Msg updateUserProfile(@PathVariable("userId") Integer id, User user, HttpSession session) {
+  public Msg updateUserProfile(@PathVariable("userId") Long id, User user, HttpSession session) {
     user.setId(id);
     Integer result = userService.updateByPrimaryKeySelective(user);
     if (result == 1) {
       // 当前登录用户信息改变时session里面存储的用户信息也应该同时改变
       User loginUser = (User) session.getAttribute("loginUser");
       if (loginUser!=null){
-        if (id == (loginUser.getId())) {
+        if (id.equals(loginUser.getId())) {
           session.setAttribute("loginUser", userService.selectById(id));
         }
       }
@@ -95,7 +95,7 @@ public class UserController {
    */
   @DeleteMapping("/root/deleteUserById/{id}")
   @ResponseBody
-  public Msg deleteUserById(@PathVariable("id")Integer id,HttpSession session){
+  public Msg deleteUserById(@PathVariable("id")Long id,HttpSession session){
     Integer result = userService.deleteById(id);
     if (result==1){
       User loginUser = (User) session.getAttribute("loginUser");
@@ -119,7 +119,7 @@ public class UserController {
   public Msg getUserInfoByUsername(HttpSession session){
     User loginUser = (User) session.getAttribute("loginUser");
     String username = loginUser.getUsername();
-    User user = userService.selectByUsername(username);
+    User user = userService.selectByUserName(username);
     return Msg.success().add("user",user);
   }
 

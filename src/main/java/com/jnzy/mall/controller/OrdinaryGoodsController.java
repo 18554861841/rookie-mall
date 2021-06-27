@@ -62,7 +62,7 @@ public class OrdinaryGoodsController {
    */
   @DeleteMapping("/root/deleteOrdinaryGoodsById/{id}")
   @ResponseBody
-  public Msg deleteOrdinaryGoodsById(@PathVariable("id") Integer id, HttpSession session) {
+  public Msg deleteOrdinaryGoodsById(@PathVariable("id") Long id, HttpSession session) {
     Integer result = ordinaryGoodsService.deleteById(id);
     if (result == 1) {
       return Msg.success();
@@ -75,7 +75,7 @@ public class OrdinaryGoodsController {
    */
   @GetMapping("/root/getOrdinaryGoodsById/{id}")
   @ResponseBody
-  public Msg getOrdinaryGoodsInfoById(@PathVariable("id") Integer id) {
+  public Msg getOrdinaryGoodsInfoById(@PathVariable("id") Long id) {
     OrdinaryGoods ordinaryGoods = ordinaryGoodsService.selectById(id);
     return Msg.success().add("ordinaryGoods", ordinaryGoods);
   }
@@ -113,7 +113,7 @@ public class OrdinaryGoodsController {
       System.out.println(fileName);
       Thread.sleep(500);
       //保存路径到数据库
-      int maxId = ordinaryGoodsService.selectMaxId();
+      Long maxId = ordinaryGoodsService.selectMaxId();
       OrdinaryGoods ordinaryGoods = new OrdinaryGoods();
       ordinaryGoods.setId(maxId);
       ordinaryGoods.setProductPic(url);
@@ -151,7 +151,7 @@ public class OrdinaryGoodsController {
     model.addAttribute("activeUrl1", "goods");
     model.addAttribute("activeUrl2", "ordinaryGoods");
 
-    return "/root/ordinaryGoodsInfo";
+    return "root/ordinaryGoodsInfo";
   }
 
   /**
@@ -159,7 +159,7 @@ public class OrdinaryGoodsController {
    */
   @PutMapping("/root/updateOrdinaryGoodsProfile/{Id}")
   @ResponseBody
-  public Msg updateOrdinaryGoodsProfile(@PathVariable("Id") Integer id, OrdinaryGoods ordinaryGoods, HttpSession session) {
+  public Msg updateOrdinaryGoodsProfile(@PathVariable("Id") Long id, OrdinaryGoods ordinaryGoods, HttpSession session) {
     ordinaryGoods.setId(id);
     Integer result = ordinaryGoodsService.updateOrdinaryGoods(ordinaryGoods);
     if (result == 1) {
@@ -185,13 +185,13 @@ public class OrdinaryGoodsController {
     PageInfo<OrdinaryGoods> pageInfo = new PageInfo<OrdinaryGoods>(list, 5);
     model.addAttribute("ordinaryGoodsPageInfo", pageInfo);
     model.addAttribute("ordinaryGoodsList", list);
-    return "/admin/ordinaryGoods";
+    return "admin/ordinaryGoods";
   }
 
 //  根据id查询
   @GetMapping("/admin/getOrdinaryGoodsById/{id}")
   @ResponseBody
-  public Msg getOrdinaryGoodsById(@PathVariable("id") Integer id, HttpSession session, Model model) {
+  public Msg getOrdinaryGoodsById(@PathVariable("id") Long id, HttpSession session, Model model) {
     OrdinaryGoods ordinaryGoods = ordinaryGoodsService.selectById(id);
     System.out.println(ordinaryGoods);
     session.setAttribute("ProductPrices",ordinaryGoods.getProductPrices());

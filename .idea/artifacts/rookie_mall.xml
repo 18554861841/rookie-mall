@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="rookie-mall">
+    <output-path>$PROJECT_DIR$/out/artifacts/rookie_mall</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="rookie-mall/web/Web" />
+      <element id="directory" name="META-INF" />
+    </root>
+  </artifact>
+</component>

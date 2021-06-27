@@ -22,31 +22,31 @@ public class SeckillGoodsServiceImpl  implements SeckillGoodsService {
 
   @Override
   public List<SeckillGoods> selectAll() {
-    return seckillGoodsMapper.selectAll();
+    return seckillGoodsMapper.selectSeckillGoods();
   }
 
   @Override
-  public SeckillGoods selectById(Integer id) {
-    return seckillGoodsMapper.selectById(id);
+  public SeckillGoods selectById(Long id) {
+    return seckillGoodsMapper.selectByPrimaryKey(id);
   }
 
   @Override
   public Integer insertSeckillGoods(SeckillGoods seckillGoods) {
-    return seckillGoodsMapper.insertSeckillGoods(seckillGoods);
+    return seckillGoodsMapper.insertSelective(seckillGoods);
   }
 
   @Override
   public Integer updateSeckillGoods(SeckillGoods seckillGoods) {
-    return seckillGoodsMapper.updateSeckillGoods(seckillGoods);
+    return seckillGoodsMapper.updateByPrimaryKeySelective(seckillGoods);
   }
 
   @Override
-  public Integer deleteById(Integer id) {
-    return seckillGoodsMapper.deleteById(id);
+  public Integer deleteById(Long id) {
+    return seckillGoodsMapper.deleteByPrimaryKey(id);
   }
 
   @Override
-  public int selectMaxId() {
+  public Long selectMaxId() {
     return seckillGoodsMapper.selectMaxId();
   }
 
@@ -58,14 +58,14 @@ public class SeckillGoodsServiceImpl  implements SeckillGoodsService {
 
   //减少库存
   @Override
-  public int deductSeckillGoodsStock(Integer id) {
+  public int deductSeckillGoodsStock(Long id) {
     return seckillGoodsMapper.deductSeckillGoodsStock(id);
   }
 
 
   //通过id查询秒杀商品
   @Override
-  public SeckillGoods selectSeckillGoodsById(Integer id) {
+  public SeckillGoods selectSeckillGoodsById(Long id) {
 //    return  seckillGoodsMapper.selectByPrimaryKey(id);
   return  seckillGoodsMapper.selectByPrimaryKey(id);
   }
@@ -111,7 +111,7 @@ public class SeckillGoodsServiceImpl  implements SeckillGoodsService {
    * @param id
    */
   @Override
-  public void deleteSeckillGood(Integer id) {
+  public void deleteSeckillGood(Long id) {
     seckillGoodsMapper.deleteByPrimaryKey(id);
   }
 

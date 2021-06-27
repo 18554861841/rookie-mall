@@ -21,12 +21,12 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
 
   @Override
   public List<SeckillOrder> selectAll() {
-    return seckillOrderMapper.selectAll();
+    return seckillOrderMapper.selectSeckillOrder();
   }
 
   @Override
   public List<SeckillOrder> selectByUsername(String username) {
-    return seckillOrderMapper.selectByUsername(username);
+    return seckillOrderMapper.selectByUserName(username);
   }
 
   @Override
@@ -35,30 +35,30 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
   }
 
   @Override
-  public SeckillOrder selectById(Integer id) {
-    return seckillOrderMapper.selectById(id);
+  public SeckillOrder selectById(Long id) {
+    return seckillOrderMapper.selectByPrimaryKey(id);
   }
 
   @Override
-  public Integer deleteById(Integer id) {
-    return seckillOrderMapper.deleteById(id);
+  public Integer deleteById(Long id) {
+    return seckillOrderMapper.deleteByPrimaryKey(id);
   }
 
   @Override
-  public Integer updateSeckillOrder(SeckillOrder seckillOrder) {
-    return seckillOrderMapper.updateSeckillOrder(seckillOrder);
+  public int updateSeckillOrder(SeckillOrder seckillOrder) {
+    return seckillOrderMapper.updateByPrimaryKeySelective(seckillOrder);
   }
 
 
 
   @Override
-  public Integer insertSeckillOrder(SeckillOrder seckillOrder) {
+  public int insertSeckillOrder(SeckillOrder seckillOrder) {
     return seckillOrderMapper.insertSelective(seckillOrder);
   }
 
   @Override
   public Integer totalSeckillOrder(String productName) {
-    return seckillOrderMapper.totalSeckillOrder( productName);
+    return seckillOrderMapper.totalSeckillOrder(productName);
   }
 
 
@@ -67,7 +67,10 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
     return null;
   }
 
-
+  @Override
+  public SeckillOrder selectSeckillOrderByGoodsIdUserId(Long goodsId, Long userId) {
+    return seckillOrderMapper.selectSeckillOrderByGoodsIdUserId(goodsId, userId);
+  }
 
 
 }

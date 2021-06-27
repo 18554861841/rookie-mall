@@ -25,27 +25,27 @@ public class OrdinaryGoodsServiceImpl implements OrdinaryGoodsService {
   }
 
   @Override
-  public OrdinaryGoods selectById(Integer id) {
-    return ordinaryGoodsMapper.selectById(id);
+  public OrdinaryGoods selectById(Long id) {
+    return ordinaryGoodsMapper.selectByPrimaryKey(id);
   }
 
   @Override
   public Integer insertOrdinaryGoods(OrdinaryGoods ordinaryGoods) {
-    return ordinaryGoodsMapper.insertOrdinaryGoods(ordinaryGoods);
+    return ordinaryGoodsMapper.insertSelective(ordinaryGoods);
   }
 
   @Override
   public Integer updateOrdinaryGoods(OrdinaryGoods ordinaryGoods) {
-    return ordinaryGoodsMapper.updateOrdinaryGoods(ordinaryGoods);
+    return ordinaryGoodsMapper.updateByPrimaryKey(ordinaryGoods);
   }
 
   @Override
-  public Integer deleteById(Integer id) {
-    return ordinaryGoodsMapper.deleteById(id);
+  public int deleteById(Long id) {
+    return ordinaryGoodsMapper.deleteByPrimaryKey(id);
   }
 
   @Override
-  public int selectMaxId() {
+  public Long selectMaxId() {
     return ordinaryGoodsMapper.selectMaxId();
   }
 
@@ -55,7 +55,7 @@ public class OrdinaryGoodsServiceImpl implements OrdinaryGoodsService {
   }
 
   @Override
-  public int deductOrdinaryGoodsStock(Integer id) {
+  public int deductOrdinaryGoodsStock(Long id) {
     return ordinaryGoodsMapper.deductOrdinaryGoodsStock(id);
   }
 

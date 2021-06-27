@@ -21,17 +21,17 @@ public interface SeckillOrderService {
 
   List<SeckillOrder> selectByDiscount();
 
-  SeckillOrder selectById(Integer id);
+  SeckillOrder selectById(Long id);
 
   //删除用户
-  Integer deleteById(Integer id);
+  Integer deleteById(Long id);
 
   //修改用户
-  Integer updateSeckillOrder(SeckillOrder seckillOrder);
+  int updateSeckillOrder(SeckillOrder seckillOrder);
 
 
   //添加订单
-  Integer insertSeckillOrder(SeckillOrder seckillOrder);
+  int insertSeckillOrder(SeckillOrder seckillOrder);
 
 
   //订单的数量
@@ -42,5 +42,8 @@ public interface SeckillOrderService {
    * @return
    */
   List<SeckillOrder> selectSeckillOrder();
+
+  SeckillOrder selectSeckillOrderByGoodsIdUserId(Long goodsId, Long userId);
+
 
 }

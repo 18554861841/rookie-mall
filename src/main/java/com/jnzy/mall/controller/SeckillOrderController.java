@@ -40,13 +40,13 @@ public class SeckillOrderController {
      */
     @PostMapping("/admin/buySeckillGoodsProfile/{id}")
     @ResponseBody
-    public Msg addUser(SeckillOrder seckillOrder, HttpSession session, @PathVariable("id") Integer id) {
+    public Msg addUser(SeckillOrder seckillOrder, HttpSession session, @PathVariable("id") Long id) {
         //提取session中的loginUser，seckillGoods,total
         User loginUser = (User) session.getAttribute("loginUser");
         SeckillGoods seckillGoods = (SeckillGoods) session.getAttribute("seckillGoods");
         Integer total = (Integer) session.getAttribute("total");
-        seckillOrder.setUsername(loginUser.getUsername());
-        seckillOrder.setProductName(seckillGoods.getProductName());
+        seckillOrder.setUserId(loginUser.getId());
+        seckillOrder.setGoodsId(seckillGoods.getId());
         seckillOrder.setTotalPrice(seckillGoods.getProductPrices());
         seckillOrder.setId(null);
 
@@ -64,7 +64,7 @@ public class SeckillOrderController {
         System.out.println(discount);
         seckillOrder.setDiscount(discount);
         System.out.println(seckillOrder);
-        Integer result = seckillOrderService.insertSeckillOrder(seckillOrder);
+        int result = seckillOrderService.insertSeckillOrder(seckillOrder);
         if (result == 1) {
             Integer i = seckillGoodsService.deductSeckillGoodsStock(id);
             if (i == 1) {
@@ -94,7 +94,7 @@ public class SeckillOrderController {
         PageInfo<SeckillOrder> pageInfo = new PageInfo<SeckillOrder>(list, 5);
         model.addAttribute("seckillOrderPageInfo", pageInfo);
         model.addAttribute("seckillOrderList", list);
-        return "/admin/sortSeckillOrder";
+        return "admin/sortSeckillOrder";
     }
 
     /**
@@ -119,7 +119,7 @@ public class SeckillOrderController {
         model.addAttribute("activeUrl1", "order");
         model.addAttribute("activeUrl2", "seckillOrder");
 
-        return "/root/seckillOrderInfo";
+        return "root/seckillOrderInfo";
     }
 
     /**
@@ -127,7 +127,7 @@ public class SeckillOrderController {
      */
     @GetMapping("/root/getSeckillOrderById/{id}")
     @ResponseBody
-    public Msg getSeckillOrderById(@PathVariable("id") Integer id) {
+    public Msg getSeckillOrderById(@PathVariable("id") Long id) {
         SeckillOrder seckillOrder = seckillOrderService.selectById(id);
         return Msg.success().add("seckillOrder", seckillOrder);
     }
@@ -138,9 +138,9 @@ public class SeckillOrderController {
      */
     @PutMapping("/root/updateSeckillOrder/{Id}")
     @ResponseBody
-    public Msg updateSeckillOrderProfile(@PathVariable("Id") Integer id, SeckillOrder seckillOrder) {
+    public Msg updateSeckillOrderProfile(@PathVariable("Id") Long id, SeckillOrder seckillOrder) {
         seckillOrder.setId(id);
-        Integer result = seckillOrderService.updateSeckillOrder(seckillOrder);
+        int result = seckillOrderService.updateSeckillOrder(seckillOrder);
         if (result == 1) {
             return Msg.success();
         }
@@ -153,7 +153,7 @@ public class SeckillOrderController {
      */
     @DeleteMapping("/root/deleteSeckillOrderById/{id}")
     @ResponseBody
-    public Msg deleteUserById(@PathVariable("id") Integer id, HttpSession session) {
+    public Msg deleteUserById(@PathVariable("id") Long id, HttpSession session) {
         Integer result = seckillOrderService.deleteById(id);
         if (result == 1) {
             return Msg.success();
