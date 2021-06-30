@@ -9,4 +9,5 @@ import lombok.Data;
 public class SeckillMessage {
     private Long goodsId;
     private Long userId;
+    private Integer total;
 }

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jnzy.mall.mapper.OrdinaryGoodsMapper" >
+  <resultMap id="BaseResultMap" type="com.jnzy.mall.pojo.OrdinaryGoods" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="product_name" property="productName" jdbcType="VARCHAR" />
+    <result column="product_prices" property="productPrices" jdbcType="DOUBLE" />
+    <result column="stock" property="stock" jdbcType="BIGINT" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="product_pic" property="productPic" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, product_name, product_prices, stock, description, product_pic
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.jnzy.mall.pojo.OrdinaryGoodsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ordinary_goods
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from ordinary_goods
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from ordinary_goods
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.jnzy.mall.pojo.OrdinaryGoodsExample" >
+    delete from ordinary_goods
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.jnzy.mall.pojo.OrdinaryGoods" >
+    insert into ordinary_goods (id, product_name, product_prices, 
+      stock, description, product_pic
+      )
+    values (#{id,jdbcType=BIGINT}, #{productName,jdbcType=VARCHAR}, #{productPrices,jdbcType=DOUBLE}, 
+      #{stock,jdbcType=BIGINT}, #{description,jdbcType=VARCHAR}, #{productPic,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.jnzy.mall.pojo.OrdinaryGoods" >
+    insert into ordinary_goods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="productName != null" >
+        product_name,
+      </if>
+      <if test="productPrices != null" >
+        product_prices,
+      </if>
+      <if test="stock != null" >
+        stock,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="productPic != null" >
+        product_pic,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="productName != null" >
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productPrices != null" >
+        #{productPrices,jdbcType=DOUBLE},
+      </if>
+      <if test="stock != null" >
+        #{stock,jdbcType=BIGINT},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="productPic != null" >
+        #{productPic,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.jnzy.mall.pojo.OrdinaryGoodsExample" resultType="java.lang.Integer" >
+    select count(*) from ordinary_goods
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+    <select id="selectAll" resultType="com.jnzy.mall.pojo.OrdinaryGoods">
+      select *
+      from ordinary_goods
+    </select>
+  <select id="selectMaxId" resultType="java.lang.Long">
+    SELECT max(id)
+    FROM ordinary_goods
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update ordinary_goods
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.productName != null" >
+        product_name = #{record.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productPrices != null" >
+        product_prices = #{record.productPrices,jdbcType=DOUBLE},
+      </if>
+      <if test="record.stock != null" >
+        stock = #{record.stock,jdbcType=BIGINT},
+      </if>
+      <if test="record.description != null" >
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productPic != null" >
+        product_pic = #{record.productPic,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update ordinary_goods
+    set id = #{record.id,jdbcType=BIGINT},
+      product_name = #{record.productName,jdbcType=VARCHAR},
+      product_prices = #{record.productPrices,jdbcType=DOUBLE},
+      stock = #{record.stock,jdbcType=BIGINT},
+      description = #{record.description,jdbcType=VARCHAR},
+      product_pic = #{record.productPic,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jnzy.mall.pojo.OrdinaryGoods" >
+    update ordinary_goods
+    <set >
+      <if test="productName != null" >
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="productPrices != null" >
+        product_prices = #{productPrices,jdbcType=DOUBLE},
+      </if>
+      <if test="stock != null" >
+        stock = #{stock,jdbcType=BIGINT},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="productPic != null" >
+        product_pic = #{productPic,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jnzy.mall.pojo.OrdinaryGoods" >
+    update ordinary_goods
+    set product_name = #{productName,jdbcType=VARCHAR},
+      product_prices = #{productPrices,jdbcType=DOUBLE},
+      stock = #{stock,jdbcType=BIGINT},
+      description = #{description,jdbcType=VARCHAR},
+      product_pic = #{productPic,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="deductOrdinaryGoodsStock">
+    update ordinary_goods
+    set stock=stock-1
+    where id=#{id} and stock>0
+  </update>
+  <update id="updatePic">
+    UPDATE ordinary_goods
+    SET product_pic = #{productPic}
+    WHERE id = #{id}
+  </update>
+</mapper>

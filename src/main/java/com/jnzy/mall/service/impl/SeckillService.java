@@ -36,11 +36,12 @@ public class SeckillService {
      * @return
      */
     @Transactional
-    public SeckillOrder seckill(Long userId, Long goodsId) {
+    public SeckillOrder seckill(Long userId, Long goodsId, String discount) {
 
         SeckillOrder seckillOrder = new SeckillOrder();
         seckillOrder.setGoodsId(goodsId);
         seckillOrder.setUserId(userId);
+        seckillOrder.setDiscount(discount);
 
         //减库存 下订单 写入秒杀订单
         int stock = seckillGoodsService.deductSeckillGoodsStock(goodsId);

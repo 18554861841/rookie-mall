@@ -3,19 +3,29 @@ package com.jnzy.mall.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jnzy.mall.common.CodeMsg;
 import com.jnzy.mall.common.Msg;
+import com.jnzy.mall.common.Result;
 import com.jnzy.mall.pojo.SeckillGoods;
 import com.jnzy.mall.pojo.SeckillOrder;
 import com.jnzy.mall.pojo.User;
+import com.jnzy.mall.queue.MQSender;
+import com.jnzy.mall.queue.domain.SeckillMessage;
+import com.jnzy.mall.redis.RedisService;
+import com.jnzy.mall.redis.domain.impl.GoodsKey;
 import com.jnzy.mall.service.SeckillGoodsService;
 import com.jnzy.mall.service.SeckillOrderService;
+import com.jnzy.mall.service.impl.SeckillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.InitializingBean;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * <p>
@@ -26,56 +36,96 @@ import java.util.List;
  * @since 2021-04-26
  */
 @Controller
-public class SeckillOrderController {
+public class SeckillOrderController implements InitializingBean{
 
-
+    @Autowired
+    RedisService redisService;
+    @Autowired
+    MQSender mqSender;
     @Autowired
     SeckillOrderService seckillOrderService;
     @Autowired
     SeckillGoodsService seckillGoodsService;
-
+    @Autowired
+    SeckillService seckillService;
 
     /**
-     * 添加订单并库存减一（admin）
+     *减少Redis网络开销，使用map
+     */
+    private Map<Long, Boolean> localOverMap = new ConcurrentHashMap<>();
+
+    /**
+     * 在项目于初始化的时候将mysql中秒杀商品数量存入缓存
+     */
+    @Override
+    public void afterPropertiesSet() {
+        List<SeckillGoods> seckillGoodsList = seckillGoodsService.selectAll();
+        if (seckillGoodsList == null) {
+            return;
+        }
+        for (SeckillGoods goods : seckillGoodsList) {
+//            System.out.println("goods:" + goods);
+            redisService.set(GoodsKey.getSeckillGoodsStock, "" + goods.getId(), goods.getStock());
+            localOverMap.put(goods.getId(), false);
+        }
+    }
+
+    /**
+     * 添加订单并库存减一（用户）
      */
     @PostMapping("/admin/buySeckillGoodsProfile/{id}")
     @ResponseBody
-    public Msg addUser(SeckillOrder seckillOrder, HttpSession session, @PathVariable("id") Long id) {
+    public Result addUser(SeckillOrder seckillOrder, HttpSession session, @PathVariable("id") Long goodsId) {
         //提取session中的loginUser，seckillGoods,total
         User loginUser = (User) session.getAttribute("loginUser");
         SeckillGoods seckillGoods = (SeckillGoods) session.getAttribute("seckillGoods");
         Integer total = (Integer) session.getAttribute("total");
-        seckillOrder.setUserId(loginUser.getId());
-        seckillOrder.setGoodsId(seckillGoods.getId());
-        seckillOrder.setTotalPrice(seckillGoods.getProductPrices());
-        seckillOrder.setId(null);
+        Long userId = loginUser.getId();
+        session.setAttribute("userId", loginUser);
 
-        String discount = null;
-        System.out.println(total);
-        if (total < 1) {
-            discount = "1折";
-        } else if (total < 2) {
-            discount = "5折";
-        } else if (total < 3) {
-            discount = "8折";
-        } else {
-            discount = "原价";
+        if (userId == null) {
+            return Result.error(CodeMsg.SESSION_ERROR);
         }
-        System.out.println(discount);
-        seckillOrder.setDiscount(discount);
-        System.out.println(seckillOrder);
-        int result = seckillOrderService.insertSeckillOrder(seckillOrder);
-        if (result == 1) {
-            Integer i = seckillGoodsService.deductSeckillGoodsStock(id);
-            if (i == 1) {
-                return Msg.success();
-            } else {
-                return Msg.fail();
-            }
+
+        //从本地判断map是否秒杀结束（防止重复秒杀）
+//        Boolean is_over = localOverMap.get(goodsId);
+//        if (!is_over) {
+//            return Result.error(CodeMsg.REPEATE_SECKILL);
+//        }
+
+        //判断库存：从redis中去取出商品数量
+        Long stock = redisService.decr(GoodsKey.getSeckillGoodsStock, "" + goodsId);
+        if (stock < 0) {
+            localOverMap.put(goodsId, true);
+            return Result.error(CodeMsg.SECKILL_OVER);
         }
-        return Msg.fail();
+
+        //商品存入队列
+        SeckillMessage message = new SeckillMessage();
+        message.setUserId(userId);
+        message.setGoodsId(goodsId);
+        message.setTotal(total);
+        mqSender.sendSeckillMessage(message);
+
+        //返回0表示订单排队中
+        return Result.success(0);
     }
 
+    /**
+     * orderId: 成功
+     * -1: 秒杀失败
+     * 0: 排队中
+     */
+    @RequestMapping(value = "/result", method = RequestMethod.GET)
+    @ResponseBody
+    public Result<Long> seckillResult(Model model, @RequestParam("userId") Long userId, @RequestParam("goodsId")Long goodsId) {
+        model.addAttribute("userId", userId);
+        if (userId == null) {
+            return Result.error(CodeMsg.SESSION_ERROR);
+        }
+        long result = seckillService.getSeckillResult(userId, goodsId);
+        return Result.success(result);
+    }
 
     /**
      * 跳转到秒杀订单界面（用户 秒杀订单）

@@ -21,14 +21,7 @@ public class MQReceiver {
     private static Logger logger = LoggerFactory.getLogger(MQReceiver.class);
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-
-    @Autowired
     private SeckillGoodsService seckillGoodsService;
-
-    @Autowired
-    private SeckillOrderService seckillOrderService;
-
     @Autowired
     private SeckillService seckillService;
 
@@ -44,12 +37,24 @@ public class MQReceiver {
         //从消息中拿到商品id和用户id
         Long goodsId = seckillMessage.getGoodsId();
         Long userId = seckillMessage.getUserId();
+        Integer total = seckillMessage.getTotal();
         //判断库存
         SeckillGoods seckillGoods = seckillGoodsService.selectSeckillGoodsById(goodsId);
         if (seckillGoods.getStock() <= 0) {
             return;
         }
+
+        String discount;
+        if (total < 1) {
+            discount = "1折";
+        } else if (total < 2) {
+            discount = "5折";
+        } else if (total < 3) {
+            discount = "8折";
+        } else {
+            discount = "原价";
+        }
         //生成秒杀订单
-        seckillService.seckill(userId, goodsId);
+        seckillService.seckill(userId, goodsId,discount);
     }
 }
